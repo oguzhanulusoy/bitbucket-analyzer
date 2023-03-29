@@ -18,7 +18,7 @@ public final class EndPointsHelper {
     public static final class Bearer {
         private Bearer() {
         }
-        public static final String TOKEN = ""; // TODO: Before running the application, get a token from Bitbucket
+        public static final String TOKEN = "NjM0Mzg4MTQ1MjM2Ou2jPsDxpM/BTPOvF6tgot9ywOe4"; // TODO: Before running the application, get a token from Bitbucket
     }
 
 }
