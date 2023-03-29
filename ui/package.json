@@ -26,7 +26,6 @@
         "react-apexcharts": "^1.4.0",
         "react-confirm-alert": "^3.0.6",
         "react-device-detect": "^2.2.2",
-        "react-dialog-confirm": "^1.1.0",
         "react-dom": "^18.2.0",
         "react-draggable": "^4.4.5",
         "react-google-charts": "^4.0.0",
