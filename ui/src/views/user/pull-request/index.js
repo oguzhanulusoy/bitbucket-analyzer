@@ -32,9 +32,10 @@ function createData(
   create,
   updated,
   commentCount,
-  title
+  title,
+  effort
 ) {
-  return { pr, id, author, emailAddress, slug, teamName, create, updated, commentCount, title };
+  return { pr, id, author, emailAddress, slug, teamName, create, updated, commentCount, title, effort };
 }
 
 const options = ['OPEN', 'MERGED', 'DECLINED'];
@@ -163,6 +164,12 @@ if(pullRequest.length <= 0 || !pullRequest){
       flex: 1.5,
     },
     {
+      field: "effort",
+      description: "This column shows the how much time passed until pull request merged",
+      headerName: "Effort",
+      flex: 0.5,
+    },
+    {
       field: "info",
       headerName: "INFO",
       filterable: false,
@@ -200,7 +207,8 @@ if(pullRequest.length <= 0 || !pullRequest){
       pr.values.createdDate,
       pr.values.updatedDate,
       pr.values.properties.commentCount < 0 ? 0 : pr.values.properties.commentCount,
-      pr.values.title
+      pr.values.title,
+      Math.floor(Math.abs(new Date(pr.values.updatedDate).getTime() - new Date(pr.values.createdDate).getTime()) / (1000 * 3600 * 24)) + ' day'
     );
   });
 
