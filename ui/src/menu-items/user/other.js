@@ -27,13 +27,20 @@ const other = {
         },
         {
             id: 'authors',
-            title: 'Authors',
+            title: 'Pull Request Stats',
             type: 'item',
             url: '/user/authors',
             icon: SwitchAccountIcon,
             breadcrumbs: false
         },
-        
+        {
+            id: 'inspectors',
+            title: 'Inspector Stats',
+            type: 'item',
+            url: '/user/inspectors',
+            icon: SwitchAccountIcon,
+            breadcrumbs: false
+        },
 
     ]
 };

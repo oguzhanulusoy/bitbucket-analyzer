@@ -118,7 +118,7 @@ const getReviewersStatus = (arr, name, searchText) =>{
 
 const getProjectPullRequests = (arr, projectName) => {
 return arr.filter((element) => {
-  return element.values.fromRef.repository.project.key == projectName
+  return element.values.fromRef.repository.name == projectName
 })
 }
 
@@ -165,7 +165,7 @@ function createData(
 }
 
 
-const AuthorPage = () => {
+const InspectorPage = () => {
   const dispatch = useDispatch();
     const totalUsers = useSelector(state => state.data.allUser)
     const allProjects = useSelector(state => state.project.allProjects)
@@ -174,12 +174,13 @@ const AuthorPage = () => {
     const inactiveUserPullRequests = useSelector(state => state.data.inactiveUserPullRequest)
     const activeUserReviewing = useSelector(state => state.data.activeUserReviewing)
     const inactiveUserReviewing = useSelector(state => state.data.inactiveUserReviewing)
-    const projectNames = useSelector(state => state.data.projects)
+    const projectNames = ['mcp_core_root', 'as_raf_core', 'as-prov-ui', 'as-portal-ui', 'mcp_install', 'IaC']
+
 
   const [pageSize, setPageSize] = useState(25);
   const [pageNum, setPageNum] = useState(0);
   const [buttonText, setButtonText] = useState("Show Inactive Users")
-const [showActive, setShowActive] = useState(false)
+  const [showActive, setShowActive] = useState(false)
   const [data, setData] = useState(useSelector(state => state.data.allUser).filter((filteredUser) => {
     return filteredUser.user.active == true
   }))
@@ -289,56 +290,41 @@ if(pullRequest.length <= 0 || !pullRequest){
       flex: 0.5,
     },
     {
-      field: "bugfix",
-      description: "This column shows total bugfixs of pull request of user",
-      headerName: "Bugfix",
-      flex: 0.5,
-    },
-    {
-      field: "feature",
-      description: "This column shows total features of pull request of user",
-      headerName: "Feature",
-      flex: 0.5,
-    },
-    {
-      field: "issue",
-      description: "This column shows total issues of pull request of user",
-      headerName: "Issue",
-      flex: 0.5,
-    },
-    {
-      field: "release",
-      description: "This column shows total release of pull request of user",
-      headerName: "Release",
-      flex: 0.5,
-    },
-    {
-      field: "userReviewing",
-      description: "This column shows total reviewing of user (added to pull requests as a reviewers).",
-      headerName: "Reviewing",
-      flex: 0.5,
-    },
-    {
-      field: "approved_rw",
-      description: "This column shows total Approved reviewing of user",
-      headerName: "Approved",
-      flex: 0.5,
-    },
-    {
-      field: "unapproved_rw",
+      field: "mcp_core_root",
       description: "This column shows total Unapproved reviewing of user",
-      headerName: "Unapproved",
+      headerName: "MCP Core",
       flex: 0.5,
     },
-   
-    ...((filteredProjects(projectNames, allProjects)).map((element)=> {
-      return {
-          field: `${element}`,
-          description:`This column shows total user's pull request of ${element}`,
-          headerName: `${element} PR`,
-          flex: 0.5,
-
-    }})),
+    {
+      field: "mcp_install",
+      description: "This column shows total Unapproved reviewing of user",
+      headerName: "Platform",
+      flex: 0.5,
+    },
+    {
+      field: "as_raf_core",
+      description: "This column shows total Unapproved reviewing of user",
+      headerName: "RAF",
+      flex: 0.5,
+    },
+    {
+      field: "IaC",
+      description: "This column shows total Unapproved reviewing of user",
+      headerName: "IAC",
+      flex: 0.5,
+    },
+    {
+      field: "as-prov-ui",
+      description: "This column shows total Unapproved reviewing of user",
+      headerName: "PROV UI",
+      flex: 0.5,
+    },
+    {
+      field: "as-portal-ui",
+      description: "This column shows total Unapproved reviewing of user",
+      headerName: "PA UI",
+      flex: 0.5,
+    },
     {
       field: "info",
       description: "This column clickable for more information of user",
@@ -400,7 +386,7 @@ if(pullRequest.length <= 0 || !pullRequest){
       pr.user.active == true ? activeUserReviewing[index].length : inactiveUserReviewing[index].length,
       pr.user.active == true ? getReviewersStatus(activeUserReviewing[index], pr.user.name, "APPROVED").length : getReviewersStatus(inactiveUserReviewing[index], pr.user.name, "APPROVED").length,
       pr.user.active == true ? getReviewersStatus(activeUserReviewing[index], pr.user.name, "UNAPPROVED").length : getReviewersStatus(inactiveUserReviewing[index], pr.user.name, "UNAPPROVED").length,
-      ...(filteredProjects(projectNames, allProjects).map((element)=>{
+      ...(projectNames.map((element)=>{
         const arr =  pr.user.active == true ? getProjectPullRequests(activeUserPullRequests[index], element).length : getProjectPullRequests(inactiveUserPullRequests[index], element).length;
         return [element, arr];
       }))
@@ -675,5 +661,5 @@ if(pullRequest.length <= 0 || !pullRequest){
   );
 };
 
-export default AuthorPage;
+export default InspectorPage;
 

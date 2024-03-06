@@ -8,6 +8,7 @@ import Loadable from 'ui-component/Loadable';
 const PullRequestPage = Loadable(lazy(() => import('views/user/pull-request')));
 const AuthorPage = Loadable(lazy(() => import('views/user/author-page')));
 const HomePage = Loadable(lazy(() => import('views/user/home-page')));
+const InspectorPage = Loadable(lazy(() => import('views/user/inspector-page')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -28,6 +29,10 @@ const MainRoutes = {
             path: 'authors',
             element: <AuthorPage />
         },
+        {
+            path: 'inspectors',
+            element: <InspectorPage />
+       },
     
     ]
 };

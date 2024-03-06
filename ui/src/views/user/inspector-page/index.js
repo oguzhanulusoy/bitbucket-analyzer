@@ -165,7 +165,7 @@ function createData(
 }
 
 
-const AuthorPage = () => {
+const InspectorPage = () => {
   const dispatch = useDispatch();
     const totalUsers = useSelector(state => state.data.allUser)
     const allProjects = useSelector(state => state.project.allProjects)
@@ -266,65 +266,24 @@ if(pullRequest.length <= 0 || !pullRequest){
       flex: 0.5,
     },
     {
-      field: "userPullRequest",
-      description: "This column shows total pull request of user",
-      headerName: "PR",
-      flex: 0.25,
-    },
-    {
-      field: "open_pr",
-      description: "This column shows total open pull request of user",
-      headerName: "Open PR",
+      field: "userReviewing",
+      description: "This column shows user team name",
+      headerName: "As a reviewer",
       flex: 0.5,
     },
     {
-      field: "declined_pr",
-      description: "This column shows total declined pull request of user",
-      headerName: "Declined PR",
+      field: "approved_rw",
+      description: "This column shows user team name",
+      headerName: "Approved",
       flex: 0.5,
     },
     {
-      field: "merged_pr",
-      description: "This column shows total merged pull request of user",
-      headerName: "Merged PR",
+      field: "unapproved_rw",
+      description: "This column shows user team name",
+      headerName: "Not Reviewed",
       flex: 0.5,
     },
-    {
-      field: "mcp_core_root",
-      description: "This column shows total Unapproved reviewing of user",
-      headerName: "MCP Core",
-      flex: 0.5,
-    },
-    {
-      field: "mcp_install",
-      description: "This column shows total Unapproved reviewing of user",
-      headerName: "Platform",
-      flex: 0.5,
-    },
-    {
-      field: "as_raf_core",
-      description: "This column shows total Unapproved reviewing of user",
-      headerName: "RAF",
-      flex: 0.5,
-    },
-    {
-      field: "IaC",
-      description: "This column shows total Unapproved reviewing of user",
-      headerName: "IAC",
-      flex: 0.5,
-    },
-    {
-      field: "as-prov-ui",
-      description: "This column shows total Unapproved reviewing of user",
-      headerName: "PROV UI",
-      flex: 0.5,
-    },
-    {
-      field: "as-portal-ui",
-      description: "This column shows total Unapproved reviewing of user",
-      headerName: "PA UI",
-      flex: 0.5,
-    },
+
     {
       field: "info",
       description: "This column clickable for more information of user",
@@ -661,5 +620,5 @@ if(pullRequest.length <= 0 || !pullRequest){
   );
 };
 
-export default AuthorPage;
+export default InspectorPage;
 
