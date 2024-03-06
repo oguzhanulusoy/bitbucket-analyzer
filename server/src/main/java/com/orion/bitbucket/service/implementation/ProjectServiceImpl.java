@@ -40,9 +40,6 @@ public class ProjectServiceImpl implements IProjectService {
         int start = 0;
         boolean isLastPage = false;
         try {
-            if (LogHelper.IS_BASE_LOGGING) {
-                log.info(MessageHelper.PROJECT_SERVICE_IMPL_INVOKED_INFO_MESSAGE);
-            }
             ProjectEntity entity = entityConfig.getProjectsEntity();
             Gson gson = utilConfig.getGson();
             while (!isLastPage) {
@@ -78,17 +75,7 @@ public class ProjectServiceImpl implements IProjectService {
             return true;
 
         } catch (Exception err) {
-            if (LogHelper.IS_BASE_LOGGING) {
-                log.error( MessageHelper.PROJECT_SERVICE_IMPL_ERROR_MESSAGE, err);
-
-            }
             return false;
-        } finally {
-            if (LogHelper.IS_BASE_LOGGING) {
-                log.info(MessageHelper.PROJECT_SERVICE_IMPL_FINALLY_INFO_MESSAGE);
-
-            }
         }
     }
-
 }

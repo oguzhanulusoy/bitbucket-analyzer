@@ -66,7 +66,6 @@ public class QueryServiceImpl implements IQueryService {
                     resutlAPI.add(entity);
                 }
 
-
             } catch (Exception err) {
                 if (LogHelper.IS_BASE_LOGGING) {
                     log.error(MessageHelper.QUERY_SERVICE_IMPL_ERROR_MESSAGE, err);
@@ -115,9 +114,6 @@ public class QueryServiceImpl implements IQueryService {
     public String updateTeamNames(String[] userName, String teamNameText, String[] collectionNames) {
         String resultText = "";
         try (MongoClient mongoClient = MongoClients.create(DatabaseHelper.DATABASE_URL)) {
-            if(LogHelper.IS_BASE_LOGGING){
-                log.info(MessageHelper.QUERY_SERVICE_IMPL_UPDATE_TEAM_NAMES_INVOKED_INFO_MESSAGE);
-            }
             for (String collectionName : collectionNames) {
                 if (LogHelper.IS_BASE_LOGGING) {
                     log.info("updateTeamNames method in QueryServiceImpl class was invoked for " + collectionName);
@@ -133,21 +129,11 @@ public class QueryServiceImpl implements IQueryService {
                     Bson filter = Filters.eq(QueryHelper.VALUES_REVIEWERS_USER_NAME, userName[i]);
                     Bson update = Updates.set(QueryHelper.VALUES_REVIEWERS_USER_TEAMNAME, teamNameText);
                     collection.updateMany(filter, update);
-
                 }
-
             }
             resultText = "Team name updates are successful";
 
         } catch (Exception err) {
-            if (LogHelper.IS_BASE_LOGGING) {
-                log.error(MessageHelper.QUERY_SERVICE_IMPL_UPDATE_TEAM_NAMES_ERROR_MESSAGE, err);
-            }
-            resultText = "Team name updates are unsuccessful.";
-        } finally {
-            if (LogHelper.IS_BASE_LOGGING) {
-                log.info(MessageHelper.QUERY_SERVICE_IMPL_UPDATE_TEAM_NAMES_FINALLY_INFO_MESSAGE);
-            }
         }
         return resultText;
     }
@@ -157,9 +143,6 @@ public class QueryServiceImpl implements IQueryService {
         Gson gson = utilConfig.getGson();
 
         try (MongoClient mongoClient = MongoClients.create(DatabaseHelper.DATABASE_URL)) {
-            if (LogHelper.IS_BASE_LOGGING) {
-                log.info(MessageHelper.QUERY_SERVICE_IMPL_INVOKED_INFO_MESSAGE + collectionName);
-            }
             BasicDBObject basicQuery = getQuery(query, condition);
             MongoDatabase database = mongoClient.getDatabase(DatabaseHelper.DATABASE_NAME);
             MongoCollection<Document> collection = database.getCollection(collectionName);
@@ -178,18 +161,9 @@ public class QueryServiceImpl implements IQueryService {
                 entity.setValues(gson.fromJson(values.toJson(), ProjectValuesEntity.class));
                 resutlAPI.add(entity);
             }
-
-
         } catch (Exception err) {
-            if (LogHelper.IS_BASE_LOGGING) {
-                log.error(MessageHelper.QUERY_SERVICE_IMPL_ERROR_MESSAGE, err);
-            }
-        } finally {
-            if (LogHelper.IS_BASE_LOGGING) {
-                log.info(MessageHelper.QUERY_SERVICE_IMPL_FINALLY_INFO_MESSAGE);
-            }
-        }
 
+        }
         return resutlAPI;
     }
 

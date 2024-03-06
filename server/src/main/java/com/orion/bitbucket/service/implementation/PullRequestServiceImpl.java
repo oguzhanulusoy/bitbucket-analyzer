@@ -42,9 +42,6 @@ public class PullRequestServiceImpl implements IPullRequestService {
         boolean isLastPage = false;
         try {
             Gson gson = utilConfig.getGson();
-            if (LogHelper.IS_BASE_LOGGING){
-                log.info(MessageHelper.PULL_REQUEST_SERVICE_IMPL_INVOKED_INFO_MESSAGE);
-            }
             CollectionNameHolder.set(collectionName);
             while (!isLastPage) {
 
@@ -68,7 +65,6 @@ public class PullRequestServiceImpl implements IPullRequestService {
                     PRValuesEntity jsonToValuesEntity = gson.fromJson(body.getJSONArray("values").get(i).toString(), PRValuesEntity.class);
                     entity.setValues(jsonToValuesEntity);
                     pullRequestRepository.save(entity);
-
                     forStart = forStart + 1;
                 }
 
@@ -77,24 +73,13 @@ public class PullRequestServiceImpl implements IPullRequestService {
             }
 
             return true;
-
         } catch (Exception err) {
-            if (LogHelper.IS_BASE_LOGGING) {
-                log.warn(MessageHelper.PULL_REQUEST_SERVICE_IMPL_ERROR_MESSAGE, err);
-            }
+
             return false;
         }
         finally {
             CollectionNameHolder.reset();
-            if (LogHelper.IS_BASE_LOGGING){
-                log.info(MessageHelper.PULL_REQUEST_SERVICE_IMPL_FINALLY_INFO_MESSAGE);
-
-            }
         }
     }
-
-
-
-
 }
 

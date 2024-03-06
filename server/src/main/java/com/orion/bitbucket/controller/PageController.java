@@ -1,4 +1,5 @@
 package com.orion.bitbucket.controller;
+
 import com.orion.bitbucket.config.EntityConfig;
 import com.orion.bitbucket.helper.*;
 import com.orion.bitbucket.service.IPullRequestService;
@@ -29,72 +30,30 @@ public class PageController {
     @GetMapping(ControllerHelper.URL_GET_All_DATA_FROM_API) // url --> /setup
     public ResponseEntity<String> getAllData() {
         try {
-            if (LogHelper.IS_BASE_LOGGING){
-                log.info(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_INVOKED_INFO_MESSAGE);
+            projectsService.getProjectsFromAPI(EndPointsHelper.BASE_URL);
+            pullRequestService.getPullRequestFromAPI(EndPointsHelper.ASRV_MCP_CORE_ROOT_URL,
+                    DatabaseHelper.ASRV_REPO_MCP_CORE_ROOT, entityConfig.getPullRequestEntity());
 
-            }
-            // for All PROJECTS
-            boolean boolProjects = projectsService.getProjectsFromAPI(EndPointsHelper.BASE_URL);
-            if(boolProjects && LogHelper.IS_BASE_LOGGING){
-                log.info(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_COMMON_INFO_MESSAGE + DatabaseHelper.PROJECTS);
-            }
-            else {
-                if(LogHelper.IS_BASE_LOGGING){
-                    log.warn(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_COMMON_WARN_MESSAGE + DatabaseHelper.PROJECTS);
+            pullRequestService.getPullRequestFromAPI(EndPointsHelper.ASRV_AS_RAF_CORE_URL,
+                    DatabaseHelper.ASRV_REPO_AS_RAF_CORE, entityConfig.getPullRequestEntity());
 
-                }
-            }
-            // for ASVR Project MCP_CORE_ROOT repos PRs
-            boolean boolAllPRS = pullRequestService.getPullRequestFromAPI(EndPointsHelper.ASRV_MCP_CORE_ROOT_URL,
-                    DatabaseHelper.COLLECTION_NAME_ASRV_MCP_CORE_ROOT,
-                    entityConfig.getPullRequestEntity());
-            if(boolProjects && LogHelper.IS_BASE_LOGGING){
-                    log.info(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_COMMON_INFO_MESSAGE + DatabaseHelper.COLLECTION_NAME_ASRV_MCP_CORE_ROOT);
-            }
-            else {
-                if(LogHelper.IS_BASE_LOGGING){
-                    log.warn(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_COMMON_WARN_MESSAGE + DatabaseHelper.COLLECTION_NAME_ASRV_MCP_CORE_ROOT);
-                }
-            }
-            // for ASVR Project AS_RAF_CORE repos PRs
-            boolean boolAsRafCore=pullRequestService.getPullRequestFromAPI(EndPointsHelper.ASRV_AS_RAF_CORE_URL,
-                    DatabaseHelper.COLLECTION_NAME_ASRV_AS_RAF_CORE, entityConfig.getPullRequestEntity());
-            if(boolAsRafCore && LogHelper.IS_BASE_LOGGING){
-                log.info(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_COMMON_INFO_MESSAGE + DatabaseHelper.COLLECTION_NAME_ASRV_AS_RAF_CORE);
-            }
-            else {
-                if(LogHelper.IS_BASE_LOGGING){
-                    log.warn(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_COMMON_WARN_MESSAGE + DatabaseHelper.COLLECTION_NAME_ASRV_AS_RAF_CORE);
-                }
-            }
+            pullRequestService.getPullRequestFromAPI(EndPointsHelper.IAC_IAC_URL,
+                    DatabaseHelper.IAC_REPO_IAC, entityConfig.getPullRequestEntity());
 
-            // for IAC Project iac repos PRs
-            boolean boolIacIac=pullRequestService.getPullRequestFromAPI(EndPointsHelper.IAC_IAC_URL,
-                    DatabaseHelper.COLLECTION_NAME_IAC_IAC, entityConfig.getPullRequestEntity());
-            if(boolIacIac && LogHelper.IS_BASE_LOGGING){
-                log.info(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_COMMON_INFO_MESSAGE + DatabaseHelper.COLLECTION_NAME_IAC_IAC);
-            }
-            else {
-                if(LogHelper.IS_BASE_LOGGING){
-                    log.warn(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_COMMON_WARN_MESSAGE + DatabaseHelper.COLLECTION_NAME_IAC_IAC);
-                }
-            }
+            pullRequestService.getPullRequestFromAPI(EndPointsHelper.ASRV_PLATFORM_URL,
+                    DatabaseHelper.ASRV_PLATFORM, entityConfig.getPullRequestEntity());
 
-            if (boolAllPRS && boolProjects && boolAsRafCore) {
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(MessageHelper.GET_ALL_DATA_SUCCESS_MESSAGE);
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageHelper.GET_ALL_DATA_FAILED_MESSAGE);
+            pullRequestService.getPullRequestFromAPI(EndPointsHelper.NG_PROV_UI_URL,
+                    DatabaseHelper.NG_PROV_UI, entityConfig.getPullRequestEntity());
+
+            pullRequestService.getPullRequestFromAPI(EndPointsHelper.NG_PA_UI_URL,
+                    DatabaseHelper.NG_PA_UI, entityConfig.getPullRequestEntity());
 
 
+        } catch (Exception ex) {
+            log.error(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_ERROR_MESSAGE, ex);
+            return null;
         }
-        catch (Exception err){
-            log.error(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_ERROR_MESSAGE, err);
-        }
-        finally {
-            log.info(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_FINALLY_INFO_MESSAGE);
-        }
-
-        return null;
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(MessageHelper.GET_ALL_DATA_SUCCESS_MESSAGE);
     }
-
 }
