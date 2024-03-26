@@ -33,26 +33,31 @@ class HttpUtil {
             return response.json()
         })
         .then(data => callback(data))
-        .catch((err) => errorCallBack(err))
+        .catch((err) => {
+                    errorCallBack(err)
+                })
     }
 
-    post =  function(url, queryParams, headers, requestBody, callback, errorCallBack){
-        const requestOptions = {
-            method: 'POST',
-            headers: headers,
-            body: requestBody,
+    post(url, queryParams, headers, requestBody, callback, errorCallBack) {
+            const requestOptions = {
+                method: 'POST',
+                headers: headers,
+                body: requestBody,
             };
-        let completeUrl = url + this.getQueryString(queryParams)
-        fetch(completeUrl, requestOptions)
-            .then(response => {
-                if(response.status === 401 && window.location.pathname !== "/redirect" && window.location.pathname !== "/login"){
-                    window.location.assign(window.location.origin + "/redirect");
-                }
-                return response.json()
-            })
-            .then(data => callback(data))
-            .catch((err) =>{ errorCallBack(err);
-            });
+            let completeUrl = url + this.getQueryString(queryParams);
+            fetch(completeUrl, requestOptions)
+                .then(response => {
+                    if (response.status === 401 && window.location.pathname !== "/redirect" && window.location.pathname !== "/login") {
+                        window.location.assign(window.location.origin + "/redirect");
+                    }
+                    return response.json();
+                })
+                .then(data => callback(data))
+                .catch(err => {
+                                if (errorCallBack) {
+                                    errorCallBack(err);
+                                }
+                            });
     }
 
     update =  function(url, queryParams, headers, requestBody, callback, errorCallBack){
@@ -70,8 +75,9 @@ class HttpUtil {
                 return response.json()
             })
             .then(data => callback(data))
-            .catch((err) =>{ errorCallBack(err);
-            });
+            .catch((err) => {
+                        errorCallBack(err)
+                    });
     }
 
         getQueryString = function(queryParams) {

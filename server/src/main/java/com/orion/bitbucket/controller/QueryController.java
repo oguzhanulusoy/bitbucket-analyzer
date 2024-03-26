@@ -23,13 +23,14 @@ import java.util.List;
 @NoArgsConstructor
 @RestController
 @RequestMapping(path = "/api/v1")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class QueryController {
     //FIELDS
     @Autowired
     private QueryServiceImpl queryService;
 
     // This method get all pull requests
-    @CrossOrigin
+    @CrossOrigin(origins = "*", maxAge = 3600)
     @GetMapping(path = ControllerHelper.URL_GET_DATA_FROM_DB) // url --> /get-data
     public ResponseEntity<List<PREntity>> getAllPullRequests(@RequestParam(name = "query", required = false, defaultValue = "") String query,
                                                              @RequestParam(name = "condition", required = false, defaultValue = "") String condition) {

@@ -71,14 +71,24 @@ const Login = ({ ...others }) => {
         return await AuthService.UserLogin(serviceCaller, requestBody);
     }
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        if (username === 'admin' && password === 'admin') {
-            toast.success('Login Success', { autoClose: 1000 });
-            setShowLoginPage(true);
-        }
-        else {
-            toast.error('Login Failed', { autoClose: 1000 });
+        try {
+            const result = await loginRequest();
+            if (result && result.status === 200) {
+                localStorage.setItem('token', result.data.token);
+                sessionStorage.setItem('userId', result.data.userId);
+                sessionStorage.setItem('role', result.data.role);
+                toast.success('Login Success', { autoClose: 1000 });
+                const route = sessionStorage.getItem('role') === "USER" ? '/user' : '/admin';
+                setShowLoginPage(true);
+            }
+            else {
+                toast.error('else', { autoClose: 1000 });
+            }
+        } catch (error) {
+            console.error("Login request failed:", error);
+            toast.error('catch', { autoClose: 1000 });
         }
     }
 

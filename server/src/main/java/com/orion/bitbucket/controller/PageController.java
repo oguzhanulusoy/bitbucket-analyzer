@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Log4j2
 @NoArgsConstructor
 @RequestMapping(path = "/api/v1")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PageController {
     @Autowired
     private IProjectService projectsService;
