@@ -16,6 +16,7 @@ import org.springframework.security.config.web.servlet.HttpSecurityDsl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -23,6 +24,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.http.HttpMethod;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +33,8 @@ import java.util.List;
 @EnableWebMvc
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity(debug = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer{
+@CrossOrigin(origins = "http://localhost:3000")
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
     private JwtAuthenticationEntryPoint handler;
 
     private static final Long MAX_AGE = 3600L;
@@ -59,10 +62,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/orion"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Update with your frontend origin
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
 
@@ -71,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         corsConfiguration.setAllowedOriginPatterns(List.of("*"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT", "OPTIONS", "PATCH", "DELETE"));
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setExposedHeaders(List.of("Authorization"));
 
@@ -94,10 +101,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .cors().and()
+                .csrf().disable()
                 .authorizeRequests()
-                .anyRequest().permitAll()
-                .and().httpBasic();
+                .antMatchers(HttpMethod.OPTIONS).permitAll() // Allow OPTIONS requests without authentication
+                .antMatchers("/auth/login").permitAll() // Allow login endpoint without authentication
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic();
     }
-
 }

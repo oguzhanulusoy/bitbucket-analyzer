@@ -66,10 +66,22 @@ const Login = ({ ...others }) => {
         let requestBody = {
             username: username,
             password: password
-        }
+        };
 
-        return await AuthService.UserLogin(serviceCaller, requestBody);
-    }
+        try {
+            const response = await fetch('http://localhost:8989/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+            return response.json();
+        } catch (error) {
+            console.error("Login request failed:", error);
+            throw new Error('Login request failed');
+        }
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();

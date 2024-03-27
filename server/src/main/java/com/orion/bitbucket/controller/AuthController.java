@@ -1,6 +1,5 @@
 package com.orion.bitbucket.controller;
 
-
 import com.orion.bitbucket.entity.Role;
 import com.orion.bitbucket.entity.User;
 import com.orion.bitbucket.requests.RegisterUserRequest;
@@ -20,29 +19,28 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:3000/orion")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
-    private AuthenticationManager authenticationManager;
-    private JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
+    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
-    private UserService userService;
-    private RoleService roleService;
-
-    private PasswordEncoder passwordEncoder;
-
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider,
+                          UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
-    @CrossOrigin(origins = "http://localhost:3000/orion")
+
     @PostMapping("/login")
     public AuthResponse login(@RequestBody UserRequest loginRequest) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-                loginRequest.getPassword());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(), loginRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
@@ -54,17 +52,17 @@ public class AuthController {
         authResponse.setMessage("Login Success");
         return authResponse;
     }
-    @CrossOrigin(origins = "http://localhost:3000/orion")
-    @PostMapping("/register") //register olup olmadığının bilgisini header'da veiyoruz.
+
+    @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterUserRequest registerRequest) {
         AuthResponse authResponse = new AuthResponse();
         if (!registerRequest.getPassword().equals(registerRequest.getRepeat_password())) {
             authResponse.setMessage("Failed, Passwords not match");
-            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
         }
         if (userService.getOneUserByUsername(registerRequest.getUsername()) != null) {
             authResponse.setMessage("Username already in use.");
-            return new ResponseEntity<AuthResponse>(authResponse,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
         }
         User user = new User();
         user.setUsername(registerRequest.getUsername());
@@ -72,12 +70,12 @@ public class AuthController {
         user.setEmail(registerRequest.getEmail());
         user.setFirstName(registerRequest.getFirst_name());
         user.setLastName(registerRequest.getLast_name());
-        Role userRole = roleService.getOneRoleById(2l);
+        Role userRole = roleService.getOneRoleById(2L); // Changed 2l to 2L
         user.setRoleId(userRole);
         User registeredUser = userService.saveOneUser(user);
         authResponse.setMessage("User successfully registered.");
         authResponse.setUserId(registeredUser.getId());
         authResponse.setRole(registeredUser.getRoleId().getRoleName());
-        return new ResponseEntity<AuthResponse>(authResponse,HttpStatus.CREATED);
+        return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 }
