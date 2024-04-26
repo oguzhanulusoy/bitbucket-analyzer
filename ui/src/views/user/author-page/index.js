@@ -443,6 +443,10 @@ if(pullRequest.length <= 0 || !pullRequest){
         url: `http://localhost:8989/api/v1/update-data/${teamText}`,
         data: uniqueIDs,
       })
+        const dataRes = await axios("http://localhost:8989/api/v1/get-data")
+        dispatch(getPullRequests([...dataRes.data]))
+        const projectsResponse = await axios("http://localhost:8989/api/v1/get-projects")
+        dispatch(getProjects([...projectsResponse.data]))
     }
     sendData();
 
