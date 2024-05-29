@@ -9,6 +9,7 @@ const PullRequestPage = Loadable(lazy(() => import('views/user/pull-request')));
 const AuthorPage = Loadable(lazy(() => import('views/user/author-page')));
 const HomePage = Loadable(lazy(() => import('views/user/home-page')));
 const InspectorPage = Loadable(lazy(() => import('views/user/inspector-page')));
+const SearchPage = Loadable(lazy(() => import('views/user/search-page')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -32,7 +33,11 @@ const MainRoutes = {
         {
             path: 'inspectors',
             element: <InspectorPage />
-       },
+        },
+        {
+             path: 'search',
+             element: <SearchPage />
+        },
     
     ]
 };

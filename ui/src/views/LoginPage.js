@@ -40,17 +40,29 @@ const LoginPage = () => {
     }
     getData();
    }, []);
-   
 
-   if(!show){
+  const boxStyle = {
+     width: '300px',
+     height: '100px',
+     backgroundColor: 'lightblue',
+     border: '2px solid darkblue',
+     display: 'flex',
+     justifyContent: 'center',
+     alignItems: 'center',
+     fontSize: '18px',
+     color: 'darkblue',
+     margin: '50px auto',
+     borderRadius: '10px',
+     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+  };
+
+  if (!show) {
     return (
-      <>
-      <LoadingCircle/>
-      </>
-            
-      
+      <div style={boxStyle}>
+        Data is loading, please wait...
+      </div>
     );
-   }
+  }
 
   return (<Navigate to={`/user/${page}`} />)
 };
