@@ -42,6 +42,15 @@ const other = {
             breadcrumbs: false
         },
 
+        {
+            id: 'search',
+            title: 'Search in API',
+            type: 'item',
+            url: '/user/search',
+            icon: ApiIcon,
+            breadcrumbs: false
+        },
+
     ]
 };
 
