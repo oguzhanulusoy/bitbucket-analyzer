@@ -4,6 +4,7 @@ import com.orion.bitbucket.config.EntityConfig;
 import com.orion.bitbucket.helper.*;
 import com.orion.bitbucket.service.IPullRequestService;
 import com.orion.bitbucket.service.IProjectService;
+import com.orion.bitbucket.service.implementation.JiraService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +25,8 @@ public class PageController {
     private IPullRequestService pullRequestService;
     @Autowired
     private EntityConfig entityConfig;
+    @Autowired
+    private JiraService jiraService;
 
     // this method get all data from API and save them into MongoDB
     @CrossOrigin
@@ -51,9 +54,15 @@ public class PageController {
 
 
         } catch (Exception ex) {
-            log.error(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_ERROR_MESSAGE, ex);
+            //log.error(MessageHelper.PAGE_CONTROLLER_GET_ALL_DATA_ERROR_MESSAGE, ex);
             return null;
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(MessageHelper.GET_ALL_DATA_SUCCESS_MESSAGE);
+    }
+
+    @CrossOrigin
+    @GetMapping("/jira/{jiraID}")
+    JiraData getJiraData(@PathVariable String jiraID) {
+        return jiraService.sendRequest(jiraID);
     }
 }
