@@ -17,12 +17,25 @@ const SearchPage = () => {
         setSearchResults(null);
         setError(null);
         setIsLoading(true);
-        try {
-            // APIClient.sendRequest(searchQuery)
-        } catch (error) {
-            setError(error.message);
-        }
+        const jiraData = await axios("http://localhost:8989/api/v1/jira/" + searchQuery)
         setIsLoading(false);
+        setSearchResults(jiraData.data);
+    };
+
+    const boxStyle = {
+      width: '300px',
+      backgroundColor: '#e0f7fa',
+      border: '2px solid #00838f',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      fontSize: '14px',
+      color: '#006064',
+      margin: '20px 0',
+      borderRadius: '10px',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      padding: '20px',
     };
 
     return (
@@ -47,10 +60,13 @@ const SearchPage = () => {
                     </Button>
                 </div>
             </form>
-            {isLoading && <p>Loading...</p>}
-            {error && <p>Error: {error}</p>}
+            {isLoading && (
+                <div style={boxStyle}>
+                    <p>Loading...</p>
+                </div>
+            )}
             {searchResults && (
-                <div>
+                <div style={boxStyle}>
                     <h2>Search Results</h2>
                     <p>Open Count: {searchResults.openCount}</p>
                     <p>Merged Count: {searchResults.mergedCount}</p>

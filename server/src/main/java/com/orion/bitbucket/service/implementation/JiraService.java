@@ -1,4 +1,10 @@
-package com.orion.bitbucket.helper;
+package com.orion.bitbucket.service.implementation;
+
+import com.orion.bitbucket.helper.JiraData;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,22 +13,16 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+@Service
+public class JiraService {
 
-public class APIClient {
-
-    public static void main(String[] args) {
-        sendRequest("AAK-93199");
-    }
-
-    public static void sendRequest(String jiraID) {
+    public JiraData sendRequest(String jiraID) {
 
         String apiUrl = "https://jira.rbbn.com/rest/api/2/issue/{placeholder}";
         String finalUrl = apiUrl.replace("{placeholder}", jiraID);
 
         // get a new token if it has expired
-        String authToken = "Njk2MzA4ODc2Mjk0Ot7nbFz6QMYxTGCkp/JylvxKeCw+";
+        String authToken = "NzQzNDcwOTcwNDY5OvQOT4Ier1losj4GLdVdTLerQN6q";
 
         try {
             URL url = new URL(finalUrl);
@@ -40,15 +40,15 @@ public class APIClient {
             }
             in.close();
 
-            filterData(response.toString());
+            return filterData(response.toString());
 
         } catch (IOException e) {
             System.out.println("Connection failed. The API token might be expired.");
-            e.printStackTrace();
+            return null;
         }
     }
 
-    public static void filterData(String jsonResponse) {
+    public JiraData filterData(String jsonResponse) {
         try {
             JSONObject jsonObject = new JSONObject(jsonResponse);
 
@@ -56,14 +56,14 @@ public class APIClient {
 
             String customField10000 = fields.getString("customfield_10000");
 
-            int openCount = extractOpenCount(customField10000);
-            System.out.println("Open Count: " + openCount);
+            long openCount = extractOpenCount(customField10000);
 
-            int mergedCount = extractMergedCount(customField10000);
-            System.out.println("Merged Count: " + mergedCount);
+            long mergedCount = extractMergedCount(customField10000);
+
+            return new JiraData(openCount, mergedCount);
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            return null;
         }
     }
 
