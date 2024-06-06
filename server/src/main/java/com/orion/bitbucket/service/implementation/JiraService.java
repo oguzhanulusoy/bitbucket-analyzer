@@ -13,6 +13,30 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * "Search in API" Feature
+ *
+ * This feature allows users to query Jira data by entering a specific Jira ID.
+ * It fetches data from the Jira API and displays it on the user interface.
+ *
+ * Purpose:
+ * - Enable users to query data based on a specific Jira ID.
+ * - Fetch and display Jira data such as open and merged issue counts.
+ *
+ * Functionality:
+ * - Users enter a Jira ID in the frontend input field.
+ * - The frontend sends this Jira ID to the backend.
+ * - The backend sends a request to the Jira API and retrieves data in JSON format.
+ * - The retrieved data is processed to extract necessary fields (e.g., openCount, mergedCount).
+ * - This data is then sent back to the frontend and displayed to the user.
+ *
+ * Demo and Development:
+ * - This feature is designed as a demo or preliminary work to see if it's possible to fetch more detailed data from the API.
+ * - Additional data fields can be added for further development.
+ * - Error handling can be improved to provide more detailed feedback to users.
+ * - Security and performance enhancements can be implemented.
+ */
+
 @Service
 public class JiraService {
 
